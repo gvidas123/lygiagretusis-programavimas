@@ -1,109 +1,63 @@
 import java.util.Random;
-
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Programa pradeda darba");
-        chess_thread.pradeti();
-        System.out.println("Programa baigia darba.");
+
+
+
+    public static void main(String[] args){
+        int[] a = generateRandomArray(1000);
+        int [] array;
+        long startTime = System.currentTimeMillis();
+        array = QuickSort.start(a);
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+
+        System.out.println("the time it took for single threaded quicksort:" + duration );
+
+
+        System.out.println("\nMultiple threads:\n");
+
+        startTime = System.currentTimeMillis();
+        MultiThreadedQuickSort.parallelQuicksort(array,0,array.length -1);
+        endTime = System.currentTimeMillis();
+        duration = endTime - startTime;
+
+
+        System.out.println("the time it took for multi threaded quicksort:" + duration );
     }
-}
 
-class chess_thread extends Thread {
-    chess_matches bendras;
-    Semaphore semaphore;
+    public static int partition(int[] array, int low, int high) {
+        int pivot = array[high];
+        int i = low - 1;
 
-    public chess_thread(chess_matches bendras, Semaphore semaphore) {
-        this.bendras = bendras;
-        this.semaphore = semaphore;
-    }
-
-    public void run() {
-        System.out.println("Gija " + this + " paleista");
-
-        for (int i = 0; i < 100; i++) {
-            try {
-                semaphore.request(); // Request resource
-                synchronized (bendras) {
-                    System.out.println("Gija " + this + " pries macha");
-                    bendras.machas();
-                    System.out.println("dabartinis rezultatas = " + bendras.rezultatas);
-                    bendras.padidinti();
-                    System.out.println("Gija " + this + " atliko macha teisingai");
-                }
-                semaphore.release(); // Release resource
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        for (int j = low; j < high; j++) {
+            if (array[j] < pivot) {
+                i++;
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
             }
         }
-        System.out.println("Gija " + this + " baigia darbą");
+
+        int temp = array[i + 1];
+        array[i + 1] = array[high];
+        array[high] = temp;
+
+        return i + 1;
     }
-
-    public static void pradeti() {
-        chess_matches bendras = new chess_matches();
-        bendras.suzaisti_zaidimai = 0;
-        bendras.rezultatas = 0;
-        Semaphore semaphore = new Semaphore(2); // Initialize semaphore with 2 resources
-        try {
-            Thread t1 = new chess_thread(bendras, semaphore);
-            t1.start();
-
-            Thread t2 = new chess_thread(bendras, semaphore);
-            t2.start();
-
-            t1.join();
-            t2.join();
-
-            System.out.println("Rezultatas suzaisti_zaidimai = " + bendras.suzaisti_zaidimai + ". Turi buti 10");
-            System.out.println("Rezultatas macho = " + bendras.rezultatas + " turėtu būti neigiamas");
-        } catch (InterruptedException exc) {
-            System.out.println("Ivyko klaida " + exc);
+    private static void printArray(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i] + " ");
         }
+        System.out.println();
     }
-}
-
-class chess_matches {
-    int suzaisti_zaidimai;
-    int rezultatas;
-
-    public void padidinti() {
-        synchronized (this) {
-            suzaisti_zaidimai++;
+    private static int[] generateRandomArray(int size) {
+        int[] array = new int[size];
+        Random random = new Random();
+        for (int i = 0; i < size; i++) {
+            array[i] = random.nextInt(10000); // Generate random integers up to 1 million
         }
+        return array;
     }
 
-    public void machas() {
-        Random rand = new Random();
-        int rand1 = rand.nextInt(50);
-        synchronized (this) {
-            if (rand1 < 30) {
-                rezultatas--;
-            } else {
-                rezultatas++;
-            }
-        }
-    }
-}
 
-class Semaphore {
-    private int resources;
-
-    public Semaphore(int initialResources) {
-        this.resources = initialResources;
-    }
-
-    public synchronized void request() throws InterruptedException {
-        while (resources <= 0) {
-            wait();
-        }
-        resources--;
-    }
-
-    public synchronized void release() {
-        resources++;
-        notify(); // Notify waiting threads that a resource has been released
-    }
-
-    public int numberAvailable() {
-        return resources;
-    }
 }
