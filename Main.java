@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args){
         int[] a = generateRandomArray(1000);
         int [] array;
+        int [] a2 = a1.clone;
         long startTime = System.currentTimeMillis();
         array = QuickSort.start(a);
         long endTime = System.currentTimeMillis();
@@ -17,7 +18,7 @@ public class Main {
         System.out.println("\nMultiple threads:\n");
 
         startTime = System.currentTimeMillis();
-        MultiThreadedQuickSort.parallelQuicksort(array,0,array.length -1);
+        MultiThreadedQuickSort.parallelQuicksort(a2,0,a2.length -1);
         endTime = System.currentTimeMillis();
         duration = endTime - startTime;
 
