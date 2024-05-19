@@ -4,47 +4,77 @@ public class Main {
 
 
     public static void main(String[] args){
-        int[] a = generateRandomArray(1000);
-        int [] array;
-        int [] a2 = a1.clone;
+        int[] a = generateRandomArray(1000000);
+        int[] a2 = a.clone();
+        int[] a3 = a.clone();
+        int[] a4 = a.clone();
+        //printArray(a2);
+
         long startTime = System.currentTimeMillis();
-        array = QuickSort.start(a);
+        QuickSort.start(a);
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
+        for (int i = 0; i < a.length; i++) {
+            if (i < a.length - 1) {
+                if (a[i] > a[i+1]) {
+                System.out.println("unfortunate");
+                }
+            }
 
+        }
+        //printArray(a);
         System.out.println("the time it took for single threaded quicksort:" + duration );
 
-
         System.out.println("\nMultiple threads:\n");
-
-        startTime = System.currentTimeMillis();
-        MultiThreadedQuickSort.parallelQuicksort(a2,0,a2.length -1);
-        endTime = System.currentTimeMillis();
-        duration = endTime - startTime;
-
-
-        System.out.println("the time it took for multi threaded quicksort:" + duration );
-    }
-
-    public static int partition(int[] array, int low, int high) {
-        int pivot = array[high];
-        int i = low - 1;
-
-        for (int j = low; j < high; j++) {
-            if (array[j] < pivot) {
-                i++;
-                int temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
+        long startTime2 = System.currentTimeMillis();
+        MultiThreadedQuickSort.parallelQuickSort(a2,4);
+        long endTime2 = System.currentTimeMillis();
+        long duration2 = endTime2 - startTime2;
+        //printArray(a2);
+        for (int i = 0; i < a2.length; i++) {
+            if (i < a.length - 1) {
+                if (a2[i] > a2[i+1]) {
+                    System.out.println(i + " " + a2[i] + "  " + i + " " + a2[i+1]);
+                }
             }
+
         }
+        System.out.println("the time it took for 2 threaded quicksort:" + duration2 );
+        System.out.println("\nMultiple threads:\n");
+        long startTime3 = System.currentTimeMillis();
+        MultiThreadedQuickSort.parallelQuickSort(a3,3);
+        long endTime3 = System.currentTimeMillis();
+        long duration3 = endTime3 - startTime3;
+        //printArray(a2);
+        for (int i = 0; i < a3.length; i++) {
+            if (i < a.length - 1) {
+                if (a3[i] > a3[i+1]) {
+                    System.out.println(i + " " + a3[i] + "  " + i + " " + a3[i+1]);
+                }
+            }
 
-        int temp = array[i + 1];
-        array[i + 1] = array[high];
-        array[high] = temp;
+        }
+        System.out.println("the time it took for 4 threaded quicksort:" + duration3 );
+        System.out.println("\nMultiple threads:\n");
+        long startTime4 = System.currentTimeMillis();
+        MultiThreadedQuickSort.parallelQuickSort(a4,2);
+        long endTime4 = System.currentTimeMillis();
+        long duration4 = endTime4 - startTime4;
+        //printArray(a2);
+        for (int i = 0; i < a4.length; i++) {
+            if (i < a.length - 1) {
+                if (a4[i] > a4[i+1]) {
+                    System.out.println(i + " " + a4[i] + "  " + i + " " + a4[i+1]);
+                }
+            }
 
-        return i + 1;
+        }
+        System.out.println("the time it took for 8 threaded quicksort:" + duration4 );
+
+
+
     }
+
     private static void printArray(int[] array) {
         for (int i = 0; i < array.length; i++) {
             System.out.print(array[i] + " ");
