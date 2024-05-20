@@ -1,3 +1,4 @@
+package multithreadedquick;
 import java.util.Random;
 
 public class MultiThreadedQuickSort {
@@ -17,7 +18,7 @@ public class MultiThreadedQuickSort {
 
         @Override
         public void run() {
-            System.out.println("OOGA");
+            //System.out.println("OOGA");
             compute(array, low, high, depth);
 
         }
@@ -29,21 +30,21 @@ public class MultiThreadedQuickSort {
 
                     int pivotIndex = partition(array, low, high);
 
-                    //QuickSortThread leftThread = new QuickSortThread(array, low, pivotIndex - 1, depth + 1);
+                    QuickSortThread leftThread = new QuickSortThread(array, low, pivotIndex - 1, depth + 1);
                     QuickSortThread rightThread = new QuickSortThread(array, pivotIndex + 1, high, depth + 1);
 
-                    //leftThread.start();
+                    leftThread.start();
                     rightThread.start();
-
+                    
                     try {
-                        //leftThread.join();
+                        leftThread.join();
                         rightThread.join();
 
                         //depth--;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    compute(array, low, pivotIndex - 1, depth + 1);
+                    //compute(array, low, pivotIndex - 1, depth + 1);
 
                 }
                 else {
@@ -52,7 +53,7 @@ public class MultiThreadedQuickSort {
                 }
             }
         }
-        public static synchronized void quickSort( int[] array, int low, int high) {
+        public static void quickSort( int[] array, int low, int high) {
             if (low < high) {
                 int pivotIndex = partition(array, low, high);
                 quickSort(array, low, pivotIndex - 1);
